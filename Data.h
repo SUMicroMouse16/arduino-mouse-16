@@ -1,23 +1,13 @@
 // This class records detection of walls, visitation state of cells/walls and special cells for later use in speed running.
 // Data uses class Cell for creation of cells after recognition.
 
-#ifndef _CELL_H
-#define _CELL_H
+//#include "Cell.h"
+#ifndef _CELL_H_
+#define _CELL_H_
 
-/*class Data {
-
-public:
-
-    //Data();
-    Cell Walls;
-    Cell SpecialCells;
-    Cell VisitationState; // Not sure if this is the right type
-    //~Data();
-};
-
-#endif*/
-
-struct {
+typedef struct {
+    
+    int placeholder; // just for compiling properly
     
     //2 dimentional array of cells
     //variables for special cells: starting, ending, current, goal

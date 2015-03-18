@@ -1,46 +1,59 @@
 // This class is for creation of cells, used for recording data.
 // Data interacts with Cell.
 
-/*typedef struct 
-{
-    
-    
-} Cell;*/
+// #define NDEBUG
+#ifndef _CELL_H_
+#define _CELL_H_
 
-#define NDEBUG
 #include <assert.h>
+#include <stdint.h>
+
+typedef unsigned char byte;
 
 enum direction {north, south, east, west}; 
 
-union Cell {
-  uint8_t value;
+union Cell{
+  //uint8_t 
+  byte value;
   struct {
-    uint8_t WallN : 1;
-    uint8_t WallE : 1;
-    uint8_t WallS : 1;
-    uint8_t WallW : 1;
+    byte WallN : 1; ///< B00000001
+    byte WallE : 1; ///< B00000010
+    byte WallS : 1; ///< B00000100
+    byte WallW : 1; ///< B00001000
     
-    uint8_t visited : 1;
+    byte visited : 1; ///< B00010000
+    byte :3;
+  };
+    struct {
+      byte lower : 4; ///< 0x0f
+      byte upper : 4; ///< 0xf0
+    };
     
-    static_assert(Cell {.value = 0x40}.WallE == 1, "Bit E wrong");
-    static_assert(Cell {.value = 0x20}.WallS == 1, "Bit S wrong"); 
-    static_assert(Cell {.value = 0x10}.WallW == 1, "Bit W wrong");
-    static_assert(Cell {.value = 0x08}.visited == 1, "Bit visited wrong");
+    constexpr Cell() : value(0x0) {
+      
+    }
+    
+    template<typename value_type = byte>
+    constexpr Cell(value_type v) : value(static_cast<byte>(v)) {
+      
+    }
+    
+    constexpr inline operator byte()
+    {
+      return value;
+    }
+    
+ 
+    
   };
   
-};
 
-/*
-    static_assert(Cell {.value = 0x88}.WallN == 1, "Bit ___ wrong");
-    or
-    static_assert(Cell {.WallN = 1}.WallN == 1, "Bit ___ wrong");
-    or something
+
+    static_assert(sizeof(Cell)==1, "Size of Cell incorrect, should be 1 B.");
+    static_assert(Cell(1<<0).WallN == 1, "Bit N mismatch.");
+    static_assert(Cell(1<<1).WallE == 1, "Bit E mismatch."); 
+    static_assert(Cell(1<<2).WallS == 1, "Bit S mismatch.");
+    static_assert(Cell(1<<3).WallW == 1, "Bit W mismatch.");
+    static_assert(Cell(1<<4).visited == 1, "Bit visited mismatch.");
     
-    #define NDEBUG
-    #include <cassert> <assert>
-             <assert.h>
-    assert(<boolean expression> && "Error msg"); // if false, print out message + abort
-                                                 // for checking if code is valid
-*/
-
-//HW: CELL (UNION{STRUCT})
+#endif

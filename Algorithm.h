@@ -1,12 +1,3 @@
-#include<stdio.h>
-#include"Cell.h"
-#include"Data.h"
-#include"Wheels.h"
-#include"Sensors.h"
-#include"Motor.h"
-
-using namespace std;
-
 //this class communicates with data and cell
 typedef struct
 {

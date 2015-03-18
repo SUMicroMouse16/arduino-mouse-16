@@ -1,14 +1,3 @@
-/*#ifndef _DATA_H
-#define _DATA_H
+#include "Data.h"
 
-Data::Data()
-{
-    
-}
-
-Data::~Data()
-{
-    
-}
-
-#endif*/
+int placeholder(); // placeholder function for compilation
