@@ -1,0 +1,10 @@
+3/usr/bin/makepp MicroMouse_Main.cc
+VERSION2.0.98.35.18.2x86_64-linux-gnu-thread-multi
+LOAD_DEFAULTc58230arduino-mousec58038/home/ubuntu/workspace
+LOAD_INCL139f120makepp_builtin_rules.mk9ba708/usr/share/makepp139edd8makepp_default_makefile.mk9ba708
+LOAD_END139edd8
+TRY139b0f0MicroMouse_Main.ccc58230
+USEdefault rule
+DEPEND139b0f0
+UP_TO_DATE139b0f0
+N_FILES000
