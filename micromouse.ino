@@ -16,6 +16,7 @@ void loop_one()
 {
     if(motortest.left_wheel.velocity != NULL)
     {
+    	//hi
        (*motortest.left_wheel.velocity)();
     }
      if(motortest.right_wheel.velocity != NULL)
