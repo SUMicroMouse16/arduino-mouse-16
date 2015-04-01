@@ -1,3 +1,6 @@
+#ifndef _ALGORITHM_H_
+#define _ALGORITHM_H_
+
 //this class communicates with data and cell
 typedef struct
 {
@@ -12,3 +15,12 @@ typedef struct
 //HAVE COMMENTS FOR WHAT EACH PARAM IN A FUNCTION IS/DOES
 //DO THEY HAVE RETURN TYPES? WHAT DO THEY MEAN
 //PUT EVERYTHING ON GITHUB
+
+
+
+//NEW CODE 3/29
+
+
+
+
+#endif
