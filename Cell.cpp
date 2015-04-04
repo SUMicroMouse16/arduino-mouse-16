@@ -2,13 +2,11 @@
 #include "Sensors.h"
 #include "Wall.h"
 
-
-static Cell mazeGrid[16][16]; 
-
+static Cell Grid :: mazeGrid[16][16];
 //NEW CODE 3/29
 
 //check if we're in grid[7][7],grid[7][8], grid[8][7], or grid[8][8],
-bool Cell ::  endCell(int row, int col)
+bool Grid ::  endCell(byte row, byte col)
 {
   if (row == 7 || row == 8){
     if (col == 7 || col == 8)
@@ -21,7 +19,7 @@ bool Cell ::  endCell(int row, int col)
 }
 
 //are we back at the beginning of the maze
-bool Cell :: beginningCell()
+bool Grid :: beginningCell()
 {
     if (row == 0 && col == 0) 
         return true;
@@ -36,13 +34,13 @@ Wall Cell :: detectWall()
 {
     Wall check;
     if () //sensor sees wall to the front
-        Wall.North = true;
+        Wall.North = 1;
     if () //sensor sees wall to the back
-        Wall.South = true;
+        Wall.South = 1;
     if () //sensor sees wall to the left
-        Wall.West = true;
+        Wall.West = 1;
     if () //sensor sees wall to the right
-       Wall.East = true;
+       Wall.East = 1;
        
     //return the wall variable so we know where the walls are
   return check; 

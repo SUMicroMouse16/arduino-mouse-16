@@ -12,51 +12,31 @@ char game_state; //variable to hold the state of the game we are in, ex: discove
 //STATE 1: FINDING THE END
 
 //start at the beginning of the maze, we're in grid[0][0] 
-int r = 0, c = 0;
-
+byte r = 0, c = 0;
+byte dir_facing=3; //always start the maze facing south
+byte p[2]= {r,c}; //store the row/col in a array for later when we call setRowCol
 Wall free_space; 
-int direction_value;
+byte direction_value;
+int counter=1;
+//extern Cell mazeGrid[16][16]; //16x16 array that represents the maze
 
-extern Cell mazeGrid[16][16]; //16x16 array that represents the maze
-
-//initialize the rows/cols of the maze grid
-for (int i=0; i<16; i++){
-    for (int j=0; j<16, j++){
-        mazeGrid[i][j].row = i;
-        mazeGrid[i][j].col = j;
-    }
-}
-
-while (mazeGrid[r][c].endCell() == false) //while not the end of the maze
+while (Grid.endCell(r, c) == false) //while not the end of the maze
 {
-   //“check off” the box we are in since we been there
-    mazeGrid[r][c].been_there = 1;
-    
     //check the four walls to see where we can go
-    free_space = mazeGrid[r][c].detectWall();
+    free_space = Grid::mazeGrid[r][c].detectWall(); //ASK ABOUT
     
-    //get the int value to know what walls are free or not,  (besides backwards)
-    direction_value = free_space.getValues();
+    //get the right direction to go
+    direction_value = free_space.calculateDirection(r, c, &counter);
     
-     //if multiple are free, pick one
-    free_space.pickDir(direction_value, mazeGrid);
+    //now we know from direction_value whether to go N-1, E-2, S-3, W-4, so based on the
+    //direction the mouse is facing, if necesary, turn so it can go the way we want and
+    //move to that next cell, return the new way its facing now
+    dir_facing = move_to_next(dir_facing, direction_value); //maybe put in motor class?  
     
-    //if the only option is back, go back
+    //depending on what direction we went, increment/decrement the row/col of the grid
+    setRowCol(direction_value, p);
     
-    if(mazeGrid[r][c].detectWall()==false) // based on sensor detections
-    {
-        // some case about if no wall detected and not already visited, mark as good path direction
-    }
-    
-    // otherwise mark as not accessible?
-    
-    
-    //if went north, increment the row
-    //if went south, decrement the row
-    //if went east, decrement the col
-    //if went west, increment the col
-    //r++;
-    //c++;
+    r=p[0]; c=p[1]; //the new row/col values are in the array p so reset them 
 }
 
 

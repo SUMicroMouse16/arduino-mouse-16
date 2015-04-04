@@ -54,32 +54,45 @@ union Cell{
 
 class Cell;
 
-extern Cell mazeGrid[16][16]; 
+
 
 //NEW CODE 3/29
 class Cell{
   Wall dat;
-  char been_there = 0; //have we been in this cell before, intiialize all to 0
+  int been_there = 0; //have we been in this cell before, intiialize all to 0
   //int row; //which row of the grid are we in
   //int col; //which col of the grid are we in
   //direction facing; //enum type, are we facing N, S, E, or W
-  //Cell* previous_Cell; //pointer to the previous cell we just came from
+  Cell* previous_Cell = NULL; //pointer to the previous cell we just came from
   
-  bool endCell(); //is this an end cell, i.e. end of the maze
-  bool beginningCell(); //is this the beginning cell
-  detectWall(); //this may be in "wall" instead of here
+  //bool endCell(int row, int col); //is this an end cell, i.e. end of the maze
+  //bool beginningCell(); //is this the beginning cell
+ void detectWall(); //this may be in "wall" instead of here
 };
-struct _xy{
+
+
+//struct for the pair of x, y values of the grid 
+struct coordinate{
   uint8_t X, Y;
 }
 
+
 class Grid{
-  Cell & operator [] (_xy coord)
+  
+  extern Cell mazeGrid[16][16]; 
+  
+  Cell & operator [] (coordinate coord)
   {
-    
+    return mazeGrid[];     
   }
   
-  int call(){ (*this)[{0,1}].endCell()};
+  bool endCell(byte row, byte col); //is this an end cell, i.e. end of the maze
+  bool beginningCell(); //is this the beginning cell
+  
+  
+  //an example of how to use the operator, pass in the row/col like 
+  //how here has 0,1 
+  //int call()  { return (*this)[{0,1}].endCell()};
 }
 
 #endif
