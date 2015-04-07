@@ -2,61 +2,78 @@
 #include "Algorithm.h"
 #include "Cell.h"
 #include "Wall.h"
+#include "Motors.h"
 
-
-char chooseDirection(); //choose the direction to go based on the possible open spaces in the maze
-char game_state; //variable to hold the state of the game we are in, ex: discover, speed_run, end, out_of_time
-
-//NEW CODE 3/29
-
-//STATE 1: FINDING THE END
-
-//start at the beginning of the maze, we're in grid[0][0] 
-byte r = 0, c = 0;
-byte dir_facing=3; //always start the maze facing south
-byte p[2]= {r,c}; //store the row/col in a array for later when we call setRowCol
-Wall free_space; 
-byte direction_value;
-int counter=1;
-//extern Cell mazeGrid[16][16]; //16x16 array that represents the maze
-
-while (Grid.endCell(r, c) == false) //while not the end of the maze
-{
-    //check the four walls to see where we can go
-    free_space = Grid::mazeGrid[r][c].detectWall(); //ASK ABOUT
+ int main() 
+ {
     
-    //get the right direction to go
-    direction_value = free_space.calculateDirection(r, c, &counter);
+    //char chooseDirection(); //choose the direction to go based on the possible open spaces in the maze
+    //char game_state; //variable to hold the state of the game we are in, ex: discover, speed_run, end, out_of_time
     
-    //now we know from direction_value whether to go N-1, E-2, S-3, W-4, so based on the
-    //direction the mouse is facing, if necesary, turn so it can go the way we want and
-    //move to that next cell, return the new way its facing now
-    dir_facing = move_to_next(dir_facing, direction_value); //maybe put in motor class?  
+    //NEW CODE 3/29
     
-    //depending on what direction we went, increment/decrement the row/col of the grid
-    setRowCol(direction_value, p);
-    
-    r=p[0]; c=p[1]; //the new row/col values are in the array p so reset them 
+        //start at the beginning of the maze, we're in grid[0][0] 
+        byte r = 0, c = 0;
+        byte dir_facing=3; //always start the maze facing south
+        byte p[2]= {r,c}; //store the row/col in a array for later when we call setRowCol
+        Wall free_space; 
+        byte direction_value;
+        int counter=1;
+        //extern Cell mazeGrid[16][16]; //16x16 array that represents the maze
+        
+        //STATE 1: FINDING THE END
+        while (!Grid.endCell(r, c)) //while not the end of the maze 
+            //!(false) = not time for cell to end
+        {
+            //check the four walls to see where we can go
+            free_space = Grid::mazeGrid[r][c].detectWall(); //ASK ABOUT
+        
+            //get the right direction to go
+            direction_value = free_space.calculateDirection(r, c, &counter);
+            
+            //now we know from direction_value whether to go N-1, E-2, S-3, W-4, so based on the
+            //direction the mouse is facing, if necesary, turn so it can go the way we want and
+            //move to that next cell, return the new way its facing now
+            move_to_next(dir_facing, direction_value, p); //maybe put in motor class?, 
+            //pass in dir_facing as a reference so it changes in here too   
+            
+            //depending on what direction we went, increment/decrement the row/col of the grid
+            setRowCol(direction_value, p);
+            
+            r=p[0]; c=p[1]; //the new row/col values are in the array p so reset them 
+        }
+        
+        
+        //STATE 2: COMING BACK TO THE BEGINNING
+        while (mazeGrid[r][c].beginningCell == false) //while we're not at the beginning again, i.e. grid [0][0]
+        {
+            //check the four walls to see where we can go
+            free_space = Grid::mazeGrid[r][c].detectWall(); 
+            
+            //get the right direction to go
+            direction_value = free_space.calculateBackDirection(r, c, &counter);
+            
+            //move to that next cell, return the new mouse is facing now
+            move_to_next(dir_facing, direction_value, p);
+        }
+        
+        
+        //STATE 3: GOING FROM BEGINNING TO END IN ONE TRY
+        while (mazeGrid[r][c].endCell() == false) //while not the end of the maze
+        { 
+            //check the four walls to see where we can go
+            free_space = Grid::mazeGrid[r][c].detectWall(); 
+            
+            //get the right direction to go
+            direction_value = free_space.calculateEndDirection(r, c, &counter);
+            
+            //move to that next cell, return the new way mouse is facing now
+            move_to_next(dir_facing, direction_value, p); 
+            
+        }
+        
+        return 0;
 }
-
-
-
-//STATE 2: COMING BACK TO THE BEGINNING
-while (mazeGrid[r][c].beginningCell == false) //while we're not at the beginning again, i.e. grid [15][0]
-{
-    
-    
-    
-}
-
-//STATE 3: GOING FROM BEGINNING TO END IN ONE TRY
-while (mazeGrid[r][c].endCell() == false) //while not the end of the maze
-{ 
-    
-    
-    
-}
-
 /*
 STATE 1:
 1. start at the beginning of the maze (one of the four corners, either grid[0][0] )
@@ -76,15 +93,19 @@ STATE 1:
 
 /*STATE 2
 1. we are starting from the middle (end) of the maze
-2. check where has a wall
-3. based on where is free, see which have a "been there" value of 1
-4. if the direction we have to go isnt north, turn accordingly
-5. move the right distance to the next cell
-6. repeat steps 
+2. while not the beginning: 
+    3. check the options we have, which direction has a wall?
+    4. if there are multiple options, choose the one that has the lowest been_there that isnt zero
+    5. move the right distance to the next cell
+6. repeat steps 3-5
 
 */
 
 /*STATE 3
-we are back at the beginning now basically do same steps as state 2, just going 
-from beginning to end instead of end to beginning
+1. starting from the beginning of the maze going to the end
+2. while not the end:
+    3. check the options we have, which direction has a wall?
+    4. if there are multiple options, choose the one that has path=1
+    5. move the right distance to the next cell
+6. repeat steps 3-5 
 */

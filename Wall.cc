@@ -5,9 +5,9 @@
 #include "../libraries/arduino/binary.h"
 
 //based on the byte value, see which directions are open or not (N, S, E, or W)
- int Wall :: calculateValue(Wall* f, int row, int col, int count)
+ byte Wall :: calculateDirection(Wall* f, byte row, byte col, int &count)
  {
-     //int dir = 0;
+     byte dir = 0;
      //ignore the firts 4 numbs and pay atention to last 4
      switch(value&0x0f){ 
         case (WestBit): // 0001: West bit enabled - wall in West direction
@@ -81,7 +81,7 @@
 
 
 
-byte Wall :: ChooseOne(byte r, byte c, int count, byte direction)
+byte Wall :: ChooseOne(byte r, byte c, int &count, byte direction)
 { //direction values 1-N, 2-E, 3-S, 4-W
  
     byte nextR=0, nextC=0, p[2];
@@ -123,7 +123,7 @@ byte Wall :: getOpposite(byte i)
 }
 
 
-byte Wall :: ChooseTwo(byte r, byte c, int *count, byte directionA, byte directionB)
+byte Wall :: ChooseTwo(byte r, byte c, int &count, byte directionA, byte directionB)
 {
     byte nextR1=r, nextC1=c, nextR2=r, nextC2=c, p1[2], p2[2], dir, dir1, dir2;
     p1[0] = nextR1; p1[1] = nextC1;
@@ -208,7 +208,7 @@ byte Wall :: ChooseTwo(byte r, byte c, int *count, byte directionA, byte directi
 }
 
 
-byte Wall :: ChooseThree(byte r, byte c, int count, byte directionA, byte directionB, byte directionC)
+byte Wall :: ChooseThree(byte r, byte c, int &count, byte directionA, byte directionB, byte directionC)
 {
     byte nextR1=r, nextC1=c, nextR2=r, nextC2=c, nextR3=r, nextC3=c, p1[2], p2[2], p3[2] dir, dir1, dir2, dir3;
     p1[0] = nextR1; p1[1] = nextC1;
@@ -255,9 +255,10 @@ byte Wall :: ChooseThree(byte r, byte c, int count, byte directionA, byte direct
     
 }
 
-byte Wall :: ChooseFour(byte r, byte c, int count, byte directionA, byte directionB, byte directionC, byte directionD)
+byte Wall :: ChooseFour(byte r, byte c, int &count, byte directionA, byte directionB, byte directionC, byte directionD)
 {
  byte nextR1=r, nextC1=c, nextR2=r, nextC2=c, nextR3=r, nextC3=c,  nextR4=r, nextC4=c, p1[2], p2[2], p3[2], p4[2] dir, dir1, dir2, dir3, dir4;
+
     p1[0] = nextR1; p1[1] = nextC1;
     p2[0] = nextR2; p2[1] = nextC2;
     p3[0] = nextR3; p3[1] = nextC3;
@@ -275,9 +276,10 @@ byte Wall :: ChooseFour(byte r, byte c, int count, byte directionA, byte directi
     
 }
 
+
 //this function returns a doable direction we can go in, after we get it, if there are multiple
 //options we will compare choices still, we'll compare the count values
-byte Wall :: finalDirection(byte r, byte c, int *count, byte direction, byte parray[])
+byte Wall :: finalDirection(byte r, byte c, int &count, byte direction, byte parray[])
 {
     byte nextR, nextC, dir=0;
     nextR = parray[0]; nextC = parray[1];
@@ -294,7 +296,6 @@ byte Wall :: finalDirection(byte r, byte c, int *count, byte direction, byte par
            {//we know 
               /* Grid::mazeGrid[r][c].counter =*/ count-- ;//we're backtracking so keep making these values neg 
                dir = direction; //go that way
-               
            }
            //circle: the option we have doesn't have a value 0 and the previous cell value will be a pos number
            else if(Grid::mazeGrid[nextR][nextC].been_there != 0 && Grid::mazeGrid[r][c].previous_Cell->been_there > 0)
@@ -306,8 +307,11 @@ byte Wall :: finalDirection(byte r, byte c, int *count, byte direction, byte par
            
           // Grid::mazeGrid[nextR1][nextC1].previous_Cell = &Grid::mazeGrid[r][c];
     }
+    
     return dir; //if only option is previous return 0, else return the direction we calculated
+    
 }
+
 
 void Wall :: setRowCol(byte direction, byte places[2])
 {//places[0] = row, places[1] = col
@@ -318,7 +322,7 @@ void Wall :: setRowCol(byte direction, byte places[2])
             break;
     
         case 2: // East: same row, one col to the right
-           places[1] = places[1]+1;
+            places[1] = places[1]+1;
             break;
     
         case 3: //South: same col, one row down

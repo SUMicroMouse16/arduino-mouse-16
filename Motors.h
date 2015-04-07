@@ -67,3 +67,17 @@ typedef struct {
 
 
  //DO THESE FUNCTIONS: TURN, MOVE, UPDATE, MOVE FWD OR BACK A CERTAIN DISTANCE 
+
+
+
+
+//NEW CODE
+class Motors
+{
+ 
+ 
+ //if necesary, turn so it can go the way we want and move to that next cell, 
+ //return the new way its facing now
+ move_to_next(byte &dir_facing, byte direction_value, byte p[]);
+ 
+}

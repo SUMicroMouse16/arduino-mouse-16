@@ -38,10 +38,10 @@ Wall () { North=0, South=0, East=0, West=0; } //constructor
   //int getValues();
   
   //calculate the direction to go in based on our options
-  byte calculateDirection(char* f, byte row, byte col, int *count);
-  byte ChooseOne(byte r, byte c, int *count, byte direction);
-  byte ChooseTwo(byte r, byte c, int *count, byte directionA, byte directionB);
-  byte ChooseThree(byte r, byte c, int *count, byte directionA, byte directionB, byte directionC);
+  byte calculateDirection(Wall* f, byte row, byte col, int &count);
+  byte ChooseOne(byte r, byte c, int &count, byte direction);
+  byte ChooseTwo(byte r, byte c, int &count, byte directionA, byte directionB);
+  byte ChooseThree(byte r, byte c, int &count, byte directionA, byte directionB, byte directionC);
   void setRowCol(byte direction, byte places[2])
   int getOpposite(byte i);
 };

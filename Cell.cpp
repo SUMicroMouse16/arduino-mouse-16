@@ -25,7 +25,6 @@ bool Grid :: beginningCell()
         return true;
     else 
         return false;
-    
 }
 
 //returns something of type "wall", wall will have four bools, one for N, S, E, W
